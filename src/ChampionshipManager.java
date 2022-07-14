@@ -5,7 +5,7 @@ public interface ChampionshipManager  {
 
     void add_driver(String team_name,Formula1Driver Driver);
 
-    void delete_driver(String name);
+    void delete_driver(int name);
 
     void change_driver(String team_name,String driver_name);
 
@@ -20,5 +20,7 @@ public interface ChampionshipManager  {
     void Display_table();
 
     void Gui();
+
+    int checkRandom();
 
 }

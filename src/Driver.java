@@ -4,11 +4,13 @@ public abstract class Driver implements Serializable {
     private String driver_name;
     private String driver_location;
     private String driver_team;
+    private int team_ID;
 
-    public Driver (String driver_name,String driver_location,String driver_team){
+    public Driver (String driver_name,String driver_location,String driver_team,Integer team_ID){
         this.driver_name =driver_name;
         this.driver_location =driver_location;
         this.driver_team=driver_team;
+        this.team_ID=team_ID;
     }
 
     public String getDriver_name (){
@@ -31,5 +33,13 @@ public abstract class Driver implements Serializable {
 
     public void setDriver_team(String driver_team){
         this.driver_team =driver_team;
+    }
+
+    public int getTeam_ID(){
+        return team_ID;
+    }
+
+    public void setTeam_ID(int team_ID){
+        this.team_ID =team_ID;
     }
 }

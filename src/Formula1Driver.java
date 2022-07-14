@@ -8,16 +8,16 @@ public class Formula1Driver extends Driver implements Serializable {
     private int number_of_races_participated=0;
     private String date;
 
-    public Formula1Driver(String driver_name, String driver_location, String driver_team) {
+    public Formula1Driver(String driver_name, String driver_location, String driver_team,Integer team_ID) {
 
-        super(driver_name, driver_location, driver_team);
+        super(driver_name, driver_location, driver_team, team_ID);
     }
 
-    public Formula1Driver(String driver_name, String driver_location, String driver_team,
+    public Formula1Driver(String driver_name, String driver_location, String driver_team,Integer team_ID,
                           int number_of_first_positions,int number_of_second_positions,int number_of_third_positions,
                           int number_of_points,int number_of_races_participated,String date){
 
-        super(driver_name,driver_location,driver_team);
+        super(driver_name,driver_location,driver_team,team_ID);
         this.number_of_first_positions = number_of_first_positions;
         this.number_of_second_positions =number_of_second_positions;
         this.number_of_third_positions= number_of_third_positions;

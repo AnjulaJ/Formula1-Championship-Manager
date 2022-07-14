@@ -28,19 +28,19 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     }
 
     @Override
-    public void delete_driver(String name) {
-        boolean name_found = false;
+    public void delete_driver(int id) {
+        boolean team_found = false;
 
         for (Formula1Driver sport : formula1) {
-            if (sport.getDriver_name().equals(name)) {
-                name_found = true;
+            if (sport.getTeam_ID()==id) {
+                team_found = true;
                 formula1.remove(sport);
-                System.out.print("**----- "+name+" has successfully deleted from the Formula1 Championship -----**");
+                System.out.print("**-----team id  "+id+" has successfully deleted from the Formula1 Championship -----**");
                 System.out.println("");
                 break;
             }
         }
-        if (!name_found) {
+        if (!team_found) {
 
             System.out.println("**--- Invalid driver Name ---**");
         }
@@ -60,11 +60,11 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 
         for (int i=1;i<=formula1.size();i++){
 
-            System.out.println("Enter team name :");
-            String team_n= user_input.next().toLowerCase();
+            System.out.println("Enter team id :");
+            int team_id= user_input.nextInt();
 
             for (Formula1Driver sport : formula1){
-                if (sport.getDriver_team().equals(team_n)){
+                if (sport.getTeam_ID()==team_id){
                     System.out.println("Enter position : ");
                     int position=user_input.nextInt();
                     int point =sport.getNumber_of_points();
@@ -84,7 +84,7 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                             break;
                         case 3:
                             int pos3 =sport.getNumber_of_third_positions();
-                            sport.setNumber_of_third_positions(pos3+pos3+1);
+                            sport.setNumber_of_third_positions(pos3=pos3+1);
                             sport.setNumber_of_points(point=point+15);
 
                             break;
@@ -154,7 +154,7 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 
             ois.close();
             fis.close();
-            System.out.println("-------Data loaded successfully------");
+            System.out.println("Data loaded 100%");
         }
         catch (IOException ioe)
         {
@@ -214,25 +214,24 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     @Override
     public void Display_table() {
         System.out.println("-------------------------------------------");
-        System.out.println("  D R I V E R  T A B L E  ");
-        System.out.println("-------------------------------------------");
+        System.out.println("----  D R I V E R  T A B L E  ----");
         System.out.println("");
 
         Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
         //https://stackoverflow.com/questions/15326248/sort-an-array-of-custom-objects-in-descending-order-on-an-int-property/15326312
 
-        String leftAlignFormat = "| %-18s | %-8s | %-8s| %-8d | %-8d| %-8d | %-8d| %-8d |%n";
+        String leftAlignFormat = "| %-18s | %-8s | %-8d | %-12s| %-8d | %-8s| %-8d | %-8d| %-8d |%n";
 
-        System.out.format("+--------------------+----------+---------+----------+---------+----------+---------+----------+%n");
-        System.out.format("| Name               | Team     | Location| Points   | 1st Pos | 2nd Pos  | 3rd Pos | Races    |%n");
-        System.out.format("+--------------------+----------+---------+----------+---------+----------+---------+----------+%n");
+        System.out.format("+--------------------+----------+----------+-------------+---------+----------+----------+---------+----------+%n");
+        System.out.format("| Name               | Team     | id       | Location    | Points  | 1st Pos  | 2nd Pos  | 3rd Pos | Races    |%n");
+        System.out.format("+--------------------+----------+----------+-------------+---------+----------+----------+---------+----------+%n");
         for (Formula1Driver drive : formula1) {
-            System.out.format(leftAlignFormat, drive.getDriver_name(), drive.getDriver_team(), drive.getDriver_location(),drive.getNumber_of_points(),
+            System.out.format(leftAlignFormat, drive.getDriver_name(), drive.getDriver_team(), drive.getTeam_ID(), drive.getDriver_location(),drive.getNumber_of_points(),
                     drive.getNumber_of_first_positions(), drive.getNumber_of_second_positions(), drive.getNumber_of_third_positions(),
                     drive.getNumber_of_races_participated());
 
         }
-        System.out.format("+--------------------+----------+---------+----------+---------+----------+---------+----------+%n");
+        System.out.format("+--------------------+----------+----------+-------------+---------+----------+----------+---------+----------+%n");
     }
 
     @Override
@@ -248,5 +247,27 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                 System.out.println("team: "+ sport.getDriver_team());
             }
         }
+    }
+
+    @Override
+    public int checkRandom() {
+
+        Random rand = new Random();
+        int id = rand.nextInt(100);
+        int a=0;
+        while (a==0){
+            int b=0;
+            id = rand.nextInt(100);
+            for (Formula1Driver sport : formula1) {
+                if (id==sport.getTeam_ID()){
+                    b=1;
+                    break;
+                }
+            }
+            if (b==0){
+                a=1;
+            }
+        }
+        return id;
     }
 }

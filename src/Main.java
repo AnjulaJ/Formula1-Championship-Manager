@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Random;
 import java.util.Scanner;
 import java.io.*;
 
@@ -8,13 +9,11 @@ public class Main  {
     static ChampionshipManager formula = (ChampionshipManager) new Formula1ChampionshipManager();
     public static void main(String[] args) throws IOException {
 
+        System.out.println(" ------- Formula 1 championship. -------  ");
         recover_data();
 
         menu:
         while(true){
-            System.out.println("");
-            System.out.println(" ------- Formula 1 championship. -------  ");
-            System.out.println("");
             System.out.println("MENU :");
             System.out.println("Enter \"A\" to Create a new driver.");
             System.out.println("Enter \"D\" to Delete a driver.");
@@ -82,6 +81,8 @@ public class Main  {
         System.out.println("  A D D   A   D R I V E R  ");
         System.out.println("------------------------");
 
+        int team_ID = formula.checkRandom();
+
         System.out.println("Enter the name of the Driver : ");
         String driver_name = user_input.next().toLowerCase();
 
@@ -91,7 +92,9 @@ public class Main  {
         System.out.println("Enter team name : ");
         String team_name = user_input.next().toLowerCase();
 
-        formula_add=new Formula1Driver(driver_name,driver_location,team_name);
+
+
+        formula_add=new Formula1Driver(driver_name,driver_location,team_name,team_ID);
 
         formula.add_driver(team_name,formula_add);
 
@@ -104,18 +107,18 @@ public class Main  {
         int num=0;
         while (num==0){
             try{
-                System.out.println("Enter driver Name to delete : ");
-                String name = user_input.next().toLowerCase();
+                System.out.print("Enter team id to delete : ");
+                int id = user_input.nextInt();
 
-                System.out.println("Warning! You have choose to delete the driver " + name + "  Y to continue or N to cancel");
+                System.out.println("Warning! You have choose to delete the team id " + id + ". Enter  Y to continue or N to cancel");
                 String choice = user_input.next().toLowerCase();
                 if(choice.equalsIgnoreCase("y")) {
-                    formula.delete_driver(name);
+                    formula.delete_driver(id);
                     System.out.println("---------------------");
                     num=1;
                 }
                 else if(choice.equalsIgnoreCase("n")) {
-                    System.out.println("*** cancelled deleting "+name+" **");
+                    System.out.println("*** cancelled deleting "+id+" **");
                     System.out.println("---------------------");
                     num=1;
                 }
@@ -155,11 +158,6 @@ public class Main  {
 
         System.out.println("*** U P D A T E  S T A T I S T I C S ****");
         System.out.println("");
-        int number_of_first_positions=0;
-        int number_of_second_positions=0;
-        int number_of_third_positions=0;
-        int number_of_points=0;
-        int number_of_races_participated=0;
 
         int num=0;
         while(num==0) {
@@ -188,10 +186,7 @@ public class Main  {
             }
         }
 
-
-
     }
-
 
     private static void save_data() throws IOException {
         formula.save_to_file(Formula1ChampionshipManager.formula1);
@@ -204,4 +199,5 @@ public class Main  {
     private static void gui(){
         formula.Gui();
     }
+
 }

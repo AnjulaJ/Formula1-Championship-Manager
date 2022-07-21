@@ -45,7 +45,7 @@ public class Formula1Driver extends Driver implements Serializable {
         return number_of_third_positions;
     }
     public void setNumber_of_third_positions(int number_of_third_positions){
-        this.number_of_first_positions = number_of_third_positions;
+        this.number_of_third_positions = number_of_third_positions;
     }
 
     public int getNumber_of_points(){

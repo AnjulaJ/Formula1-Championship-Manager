@@ -11,61 +11,58 @@ public class Main  {
 
         System.out.println(" ------- Formula 1 championship. -------  ");
         recover_data();
+        randomRace();
+        display_driver_table();
 
         menu:
         while(true){
             System.out.println("MENU :");
-            System.out.println("Enter \"A\" to Create a new driver.");
-            System.out.println("Enter \"D\" to Delete a driver.");
-            System.out.println("Enter \"C\" to Change the driver for an existing constructor team.");
-            System.out.println("Enter \"V\" to Display the various statistics of a existing driver");
-            System.out.println("Enter \"T\" to Display the Formula 1 Driver Table.");
-            System.out.println("Enter \"U\" to add a Race.");
-            System.out.println("Enter \"S\" to save data.");
-            System.out.println("Enter \"G\" to open the GUI.");
-            System.out.println("Enter \"Q\" to exit");
+            System.out.println("Enter \"1\" to Create a new driver.");
+            System.out.println("Enter \"2\" to Delete a driver.");
+            System.out.println("Enter \"3\" to Change the driver for an existing constructor team.");
+            System.out.println("Enter \"4\" to Display the various statistics of a existing driver");
+            System.out.println("Enter \"5\" to Display the Formula 1 Driver Table.");
+            System.out.println("Enter \"6\" to add a Race.");
+            System.out.println("Enter \"7\" to save data.");
+            System.out.println("Enter \"8\" to Generate a Random Race");
+            System.out.println("Enter \"9\" to open the GUI.");
+            System.out.println("Enter \"0\" to exit");
             System.out.println("");
 
             System.out.print("Enter your option : ");
             Scanner input = new Scanner(System.in);
-            String user_option = input.next();
+            int user_option = input.nextInt();
 
 
             switch (user_option) {
-                case "A":
-                case "a":
+                case 1:
                     enter_a_new_driver();
                     break;
-                case "D":
-                case "d":
+                case 2:
                     delete_a_driver();
                     break;
-                case "C":
-                case "c":
+                case 3:
                     change_a_driver();
                     break;
-                case "T":
-                case "t":
-                    display_driver_table();
-                    break;
-                case "V":
-                case "v":
+                case 4:
                     statistics_of_a_driver();
                     break;
-                case "U":
-                case "u":
+                case 5:
+                    display_driver_table();
+                    break;
+                case 6:
                     add_Race();
                     break;
-                case "S":
-                case "s":
+                case 7:
                     save_data();
                     break;
-                case "G":
-                case "g":
+                case 8:
+                    randomRace();
+                    break;
+                case 9:
                     gui();
                     break;
-                case "Q":
-                case "q":
+                case 0:
                     System.out.println("Exit");
                     break menu;
                 default:
@@ -84,13 +81,13 @@ public class Main  {
         int team_ID = formula.checkRandom();
 
         System.out.println("Enter the name of the Driver : ");
-        String driver_name = user_input.next().toLowerCase();
+        String driver_name = user_input.nextLine();
 
         System.out.println("Enter the location of Driver: ");
-        String driver_location = user_input.next().toLowerCase();
+        String driver_location = user_input.nextLine();
 
         System.out.println("Enter team name : ");
-        String team_name = user_input.next().toLowerCase();
+        String team_name = user_input.nextLine();
 
 
 
@@ -198,6 +195,10 @@ public class Main  {
 
     private static void gui(){
         formula.Gui();
+    }
+
+    private static void randomRace(){
+        formula.generate_randomRace();
     }
 
 }

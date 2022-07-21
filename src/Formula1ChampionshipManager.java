@@ -58,9 +58,15 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     @Override
     public void updateScore(String race_date) {
 
+        System.out.print("Team id list-(");
+        for (Formula1Driver sport : formula1){
+            System.out.print(+sport.getTeam_ID()+"/");
+        }
+        System.out.print(")" );
+
         for (int i=1;i<=formula1.size();i++){
 
-            System.out.println("Enter team id :");
+            System.out.println("\nEnter team id :");
             int team_id= user_input.nextInt();
 
             for (Formula1Driver sport : formula1){
@@ -220,33 +226,24 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
         //https://stackoverflow.com/questions/15326248/sort-an-array-of-custom-objects-in-descending-order-on-an-int-property/15326312
 
-        String leftAlignFormat = "| %-18s | %-8s | %-8d | %-12s| %-8d | %-8s| %-8d | %-8d| %-8d |%n";
+        String leftAlignFormat = "| %-23s | %-22s | %-8d | %-15s| %-8d | %-8s| %-8d | %-8d| %-8d |%n";
 
-        System.out.format("+--------------------+----------+----------+-------------+---------+----------+----------+---------+----------+%n");
-        System.out.format("| Name               | Team     | id       | Location    | Points  | 1st Pos  | 2nd Pos  | 3rd Pos | Races    |%n");
-        System.out.format("+--------------------+----------+----------+-------------+---------+----------+----------+---------+----------+%n");
+        System.out.format("+-------------------------+------------------------+----------+----------------+----------+---------+----------+---------+----------+%n");
+        System.out.format("| Name                    | Team                   | id       | Location       | Points   | 1st Pos | 2nd Pos  | 3rd Pos | Races    |%n");
+        System.out.format("+-------------------------+------------------------+----------+----------------+----------+---------+----------+---------+----------+%n");
         for (Formula1Driver drive : formula1) {
             System.out.format(leftAlignFormat, drive.getDriver_name(), drive.getDriver_team(), drive.getTeam_ID(), drive.getDriver_location(),drive.getNumber_of_points(),
                     drive.getNumber_of_first_positions(), drive.getNumber_of_second_positions(), drive.getNumber_of_third_positions(),
                     drive.getNumber_of_races_participated());
 
         }
-        System.out.format("+--------------------+----------+----------+-------------+---------+----------+----------+---------+----------+%n");
+        System.out.format("+-------------------------+------------------------+----------+----------------+----------+---------+----------+---------+----------+%n");
+
     }
 
     @Override
     public void Gui() {
-        System.out.println("enter team name: ");
-        String n= user_input.next().toLowerCase();
-        for (Formula1Driver sport : formula1) {
-            if (sport.getDriver_team().equals(n)) {
-                System.out.println("1st pos: " + sport.getNumber_of_first_positions());
-                System.out.println("2nd pos: "+ sport.getNumber_of_second_positions());
-                System.out.println("3rd pos: "+ sport.getNumber_of_third_positions());
-                System.out.println("points: "+ sport.getNumber_of_points());
-                System.out.println("team: "+ sport.getDriver_team());
-            }
-        }
+
     }
 
     @Override
@@ -269,5 +266,81 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
             }
         }
         return id;
+    }
+
+    @Override
+    public void generate_randomRace() {
+
+        System.out.println("ok");
+            Random rand = new Random();
+            ArrayList<Integer> tempPositions = new ArrayList<>();
+
+            for (Formula1Driver sport : formula1){
+
+                int position=100;
+
+                int temp=0;
+                while (temp==0){
+                    if (tempPositions.contains(position)){
+                        position=rand.nextInt(formula1.size());
+                    }
+                    else{
+                        tempPositions.add(position);
+                        temp=1;
+                    }
+                }
+//                while(tempPositions.contains(position)){
+//                    int random_Bound=formula1.size();
+//                    position=rand.nextInt(random_Bound);
+//                }
+                int point =sport.getNumber_of_points();
+
+                switch (position){
+                    case 1:
+                        int pos1 =sport.getNumber_of_first_positions();
+                        sport.setNumber_of_first_positions(pos1=pos1+1);
+                        sport.setNumber_of_points(point=point+25);
+
+                        break;
+                    case 2:
+                        int pos2 =sport.getNumber_of_second_positions();
+                        sport.setNumber_of_second_positions(pos2=pos2+1);
+                        sport.setNumber_of_points(point=point+18);
+
+                        break;
+                    case 3:
+                        int pos3 =sport.getNumber_of_third_positions();
+                        sport.setNumber_of_third_positions(pos3=pos3+1);
+                        sport.setNumber_of_points(point=point+15);
+
+                        break;
+                    case 4:
+                        sport.setNumber_of_points(point=point+12);
+                        break;
+                    case 5:
+                        sport.setNumber_of_points(point=point+10);
+                        break;
+                    case 6:
+                        sport.setNumber_of_points(point=point+8);
+                        break;
+                    case 7:
+                        sport.setNumber_of_points(point=point+6);
+                        break;
+                    case 8:
+                        sport.setNumber_of_points(point=point+4);
+                        break;
+                    case 9:
+                        sport.setNumber_of_points(point=point+2);
+                        break;
+                    case 10:
+                        sport.setNumber_of_points(point=point+1);
+                        break;
+                    default:
+                        break;
+
+                }
+                int count =sport.getNumber_of_races_participated();
+                sport.setNumber_of_races_participated(count=count+1);
+            }
     }
 }

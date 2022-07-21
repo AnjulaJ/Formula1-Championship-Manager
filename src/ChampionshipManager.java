@@ -23,4 +23,6 @@ public interface ChampionshipManager  {
 
     int checkRandom();
 
+    void generate_randomRace();
+
 }

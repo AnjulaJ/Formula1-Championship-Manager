@@ -1,3 +1,5 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.util.*;
 import java.io.FileInputStream;
@@ -7,6 +9,15 @@ import java.io.ObjectInputStream;
 public class Formula1ChampionshipManager  implements ChampionshipManager {
     public static ArrayList<Formula1Driver> formula1 = new ArrayList<>();
     Scanner user_input = new Scanner(System.in);
+
+    JButton sortByTotalPoint;
+    JButton sortByFirstPos;
+    JFrame mainFrame;
+    JTable formula1DTable;
+    JScrollPane jsMain;
+    JTable randomFormula1GenerateTable;
+    JScrollPane jsRandomRace;
+    JButton generateRandomRace;
 
     @Override
     public void add_driver(String team_name,Formula1Driver formula_add) {
@@ -244,6 +255,25 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     @Override
     public void Gui() {
 
+        mainFrame = new JFrame();
+        mainFrame.setTitle("FORMULA1 CHAMPIONSHIP MANAGER");
+        mainFrame.setSize(2000, 1000);
+        mainFrame.setLayout(null);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //setting the main logo
+//        ImageIcon mainLogo = new ImageIcon("formula1Logo.png");
+//        mainFrame.setIconImage(mainLogo.getImage());
+
+        //Displaying the main table
+        JTable table = guiTableDisplayStatistics();
+        jsMain = new JScrollPane(table);
+        jsMain.setBounds(100,50,1300,183);
+        mainFrame.add(jsMain);
+
+        mainFrame.setVisible(true);
+
     }
 
     @Override
@@ -271,13 +301,12 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     @Override
     public void generate_randomRace() {
 
-        System.out.println("ok");
             Random rand = new Random();
             ArrayList<Integer> tempPositions = new ArrayList<>();
 
             for (Formula1Driver sport : formula1){
 
-                int position=100;
+                int position=rand.nextInt(formula1.size());
 
                 int temp=0;
                 while (temp==0){
@@ -289,12 +318,9 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                         temp=1;
                     }
                 }
-//                while(tempPositions.contains(position)){
-//                    int random_Bound=formula1.size();
-//                    position=rand.nextInt(random_Bound);
-//                }
-                int point =sport.getNumber_of_points();
 
+                int point =sport.getNumber_of_points();
+                System.out.print(position+" ");
                 switch (position){
                     case 1:
                         int pos1 =sport.getNumber_of_first_positions();
@@ -342,5 +368,30 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                 int count =sport.getNumber_of_races_participated();
                 sport.setNumber_of_races_participated(count=count+1);
             }
+    }
+
+
+
+    public JTable guiTableDisplayStatistics() {
+        String driverTableColumn[] = {"Driver Name", "Driver Location", "Driver Team",
+                "Number of First Places", "Number of Second Places", "Number of Third Places", "Number of Races Participated","Number of Points"};
+        DefaultTableModel driverTable = new DefaultTableModel(driverTableColumn,0);
+        formula1DTable = new JTable(driverTable);
+        formula1DTable.setFillsViewportHeight(true);
+        for (Formula1Driver formula1Driver : formula1) {
+            String dName = formula1Driver.getDriver_name();
+            String dLocation = formula1Driver.getDriver_location();
+            String team = formula1Driver.getDriver_team();
+            //String team_id = Integer.toString(formula1Driver.getTeam_ID());
+            String numOfFirst = Integer.toString(formula1Driver.getNumber_of_first_positions());
+            String numOfSecond = Integer.toString(formula1Driver.getNumber_of_second_positions());
+            String numOfThird = Integer.toString(formula1Driver.getNumber_of_third_positions());
+            String numOfRace = Integer.toString(formula1Driver.getNumber_of_races_participated());
+            String numOfPoints = Integer.toString(formula1Driver.getNumber_of_points());
+            Object [] data = {dName, dLocation, team, numOfFirst, numOfSecond, numOfThird, numOfRace, numOfPoints};
+            driverTable.addRow(data);
+        }
+        driverTable.fireTableDataChanged();
+        return formula1DTable;
     }
 }

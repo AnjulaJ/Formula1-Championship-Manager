@@ -11,8 +11,6 @@ public class Main  {
 
         System.out.println(" ------- Formula 1 championship. -------  ");
         recover_data();
-        randomRace();
-        display_driver_table();
 
         menu:
         while(true){
@@ -88,8 +86,6 @@ public class Main  {
 
         System.out.println("Enter team name : ");
         String team_name = user_input.nextLine();
-
-
 
         formula_add=new Formula1Driver(driver_name,driver_location,team_name,team_ID);
 

@@ -11,6 +11,11 @@ public class Main  {
 
         System.out.println(" ------- Formula 1 championship. -------  ");
         recover_data();
+        randomRace();
+        randomRace();
+        randomRace();
+        randomRace();
+        gui();
 
         menu:
         while(true){

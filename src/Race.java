@@ -1,47 +1,48 @@
 public class Race{
-    private String Race_Date;
-    private String driver_name;
-
-    private String position_1;
-    private String position_2;
-    private String position_3;
-    private String position_4;
-    private String position_5;
-    private String position_6;
-    private String position_7;
-    private String position_8;
-    private String position_9;
-    private String position_10;
-    private String position_11;
-    private String position_12;
-    private String position_13;
-    private String position_14;
-    private String position_15;
-    private String position_16;
-    private String position_17;
-    private String position_18;
-    private String position_19;
-    private String position_20;
-
-
-    public Race(String Race_Date,String position1,String position_2,String position_3,String position_4,
-                String position_5,String position_6,String position_7,String position_8,String position_9,
-                String position_10,String position_11,String position_12,String position_13,String position_14,
-                String position_15,String position_16,String position_17,String position_18,String position_19,
-                String position_20){
-
+    private String raceDate;
+    private int firstPosition;
+    private int SecondPosition;
+    private int thirdPosition;
+    public Race (String raceDate,int firstPosition,int SecondPosition,int thirdPosition){
+        this.raceDate =raceDate;
+        this.firstPosition =firstPosition;
+        this.SecondPosition =SecondPosition;
+        this.thirdPosition =thirdPosition;
     }
 
-    public String getRace_Date() {
-        return Race_Date;
+    public String getRaceDate (){
+        return raceDate;
     }
 
-    public void setRace_Date(String Race_Date) {
-        this.Race_Date = Race_Date;
+    public void setRaceDate(String raceDate){
+        this.raceDate =raceDate;
     }
 
-    public void setPosition_1(String position_1) {
-        this.position_1 = position_1;
+
+
+    public int getFirstPosition (){
+        return firstPosition;
+    }
+
+    public void setFirstPosition(int firstPosition){
+        this.firstPosition =firstPosition;
+    }
+
+
+
+    public int getSecondPosition (){
+        return SecondPosition;
+    }
+
+    public void setSecondPosition(int SecondPosition){
+        this.SecondPosition =SecondPosition;
+    }
+    public int getThirdPosition (){
+        return thirdPosition;
+    }
+
+    public void setThirdPosition(int thirdPosition){
+        this.thirdPosition =thirdPosition;
     }
 
 }

@@ -1,5 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.*;
 import java.io.FileInputStream;
@@ -8,16 +11,29 @@ import java.io.ObjectInputStream;
 
 public class Formula1ChampionshipManager  implements ChampionshipManager {
     public static ArrayList<Formula1Driver> formula1 = new ArrayList<>();
+
+    public static ArrayList<Race> races = new ArrayList<>();
     Scanner user_input = new Scanner(System.in);
 
     JButton sortByTotalPoint;
+    JButton sortByFirstPositions;
+    JButton randomRace;
+
+    JButton randomRaceWithProb;
+
+    JButton displayAllRaces;
+
     JButton sortByFirstPos;
     JFrame mainFrame;
     JTable formula1DTable;
+
+    JTable raceTable;
     JScrollPane jsMain;
     JTable randomFormula1GenerateTable;
     JScrollPane jsRandomRace;
     JButton generateRandomRace;
+    DefaultTableModel driverTable;
+    DefaultTableModel positionTable;
 
     @Override
     public void add_driver(String team_name,Formula1Driver formula_add) {
@@ -257,7 +273,7 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 
         mainFrame = new JFrame();
         mainFrame.setTitle("FORMULA1 CHAMPIONSHIP MANAGER");
-        mainFrame.setSize(2000, 1000);
+        mainFrame.setSize(1800, 700);
         mainFrame.setLayout(null);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -267,11 +283,33 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 //        mainFrame.setIconImage(mainLogo.getImage());
 
         //Displaying the main table
+        Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
         JTable table = guiTableDisplayStatistics();
         jsMain = new JScrollPane(table);
-        jsMain.setBounds(100,50,1300,183);
+        jsMain.setBounds(50,50,1250,200);
         mainFrame.add(jsMain);
 
+
+        JTable raceTable = guiTableDisplayStatistics();
+        jsMain = new JScrollPane(raceTable);
+        jsMain.setBounds(40,400,1250,200);
+        mainFrame.add(jsMain);
+
+
+        sortByTotalPoint = new JButton("Sort By Points");
+        sortByTotalPoint.setBounds(200, 300, 200, 50);
+        mainFrame.add(sortByTotalPoint);
+        sortByTotalPoint.addActionListener(this::actionPerformedPointSort);
+
+        sortByFirstPositions = new JButton("Sort By 1st No of Positions");
+        sortByFirstPositions.setBounds(500, 300, 200, 50);
+        mainFrame.add(sortByFirstPositions);
+        sortByFirstPositions.addActionListener(this::actionPerformedFirstSort);
+
+        randomRace = new JButton("Generate Random Race");
+        randomRace.setBounds(800, 300, 200, 50);
+        mainFrame.add(randomRace);
+        randomRace.addActionListener(this::actionPerformedRandomRace);
         mainFrame.setVisible(true);
 
     }
@@ -367,31 +405,94 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                 }
                 int count =sport.getNumber_of_races_participated();
                 sport.setNumber_of_races_participated(count=count+1);
+
             }
     }
 
 
 
     public JTable guiTableDisplayStatistics() {
-        String driverTableColumn[] = {"Driver Name", "Driver Location", "Driver Team",
-                "Number of First Places", "Number of Second Places", "Number of Third Places", "Number of Races Participated","Number of Points"};
-        DefaultTableModel driverTable = new DefaultTableModel(driverTableColumn,0);
+        //Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
+        String driverTableColumn[] = {"Driver Name", "Location", "Team","Team ID",
+                "No Of 1st Places", "No Of 2nd Places", "No Of 3rd Places", "Races","Points"};
+        driverTable = new DefaultTableModel(driverTableColumn,0);
         formula1DTable = new JTable(driverTable);
         formula1DTable.setFillsViewportHeight(true);
         for (Formula1Driver formula1Driver : formula1) {
             String dName = formula1Driver.getDriver_name();
             String dLocation = formula1Driver.getDriver_location();
             String team = formula1Driver.getDriver_team();
-            //String team_id = Integer.toString(formula1Driver.getTeam_ID());
+            String team_id = Integer.toString(formula1Driver.getTeam_ID());
             String numOfFirst = Integer.toString(formula1Driver.getNumber_of_first_positions());
             String numOfSecond = Integer.toString(formula1Driver.getNumber_of_second_positions());
             String numOfThird = Integer.toString(formula1Driver.getNumber_of_third_positions());
             String numOfRace = Integer.toString(formula1Driver.getNumber_of_races_participated());
             String numOfPoints = Integer.toString(formula1Driver.getNumber_of_points());
-            Object [] data = {dName, dLocation, team, numOfFirst, numOfSecond, numOfThird, numOfRace, numOfPoints};
+            Object [] data = {dName, dLocation, team,team_id, numOfFirst, numOfSecond, numOfThird, numOfRace, numOfPoints};
             driverTable.addRow(data);
         }
         driverTable.fireTableDataChanged();
         return formula1DTable;
     }
+
+    public JTable raceTableDisplayStatistics() {
+        //Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
+        String raceTableColumn[] = {"Driver Name", "Position"};
+        positionTable = new DefaultTableModel(raceTableColumn,0);
+        raceTable = new JTable(positionTable);
+        raceTable.setFillsViewportHeight(true);
+        for (Formula1Driver formula1Driver : formula1) {
+            String dName = formula1Driver.getDriver_name();
+            String dLocation = formula1Driver.getDriver_location();
+            String team = formula1Driver.getDriver_team();
+            String team_id = Integer.toString(formula1Driver.getTeam_ID());
+            String numOfFirst = Integer.toString(formula1Driver.getNumber_of_first_positions());
+            String numOfSecond = Integer.toString(formula1Driver.getNumber_of_second_positions());
+            String numOfThird = Integer.toString(formula1Driver.getNumber_of_third_positions());
+            String numOfRace = Integer.toString(formula1Driver.getNumber_of_races_participated());
+            String numOfPoints = Integer.toString(formula1Driver.getNumber_of_points());
+            Object [] data = {dName, dLocation};
+            positionTable.addRow(data);
+        }
+        positionTable.fireTableDataChanged();
+        return raceTable;
+    }
+
+    public void actionPerformedPointSort(ActionEvent ePointSort){
+        if(ePointSort.getSource() == sortByTotalPoint){
+            Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points));
+            //Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
+            mainFrame.remove(jsMain);
+            JTable table = guiTableDisplayStatistics();
+            jsMain = new JScrollPane(table);
+            jsMain.setBounds(50,50,1250,200);
+            mainFrame.add(jsMain);
+
+        }
+    }
+    public void actionPerformedFirstSort(ActionEvent eFirstPositionsSort){
+        if(eFirstPositionsSort.getSource() == sortByFirstPositions){
+            Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_first_positions).reversed());
+            mainFrame.remove(jsMain);
+            JTable table = guiTableDisplayStatistics();
+            jsMain = new JScrollPane(table);
+            jsMain.setBounds(50,50,1250,200);
+            mainFrame.add(jsMain);
+
+        }
+    }
+
+    public void actionPerformedRandomRace(ActionEvent eRandomRace){
+        if(eRandomRace.getSource() == randomRace){
+            generate_randomRace();
+            Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
+            mainFrame.remove(jsMain);
+            JTable table = guiTableDisplayStatistics();
+            jsMain = new JScrollPane(table);
+            jsMain.setBounds(50,50,1250,200);
+            mainFrame.add(jsMain);
+
+        }
+    }
+
 }

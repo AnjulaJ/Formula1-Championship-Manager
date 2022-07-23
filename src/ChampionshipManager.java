@@ -25,6 +25,10 @@ public interface ChampionshipManager  {
 
     void generate_randomRace();
 
+    void generate_randomRaceWithProb();
+
+
+
 
 
 

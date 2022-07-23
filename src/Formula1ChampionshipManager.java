@@ -327,19 +327,24 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         mainFrame.add(sortByTotalPoint);
         sortByTotalPoint.addActionListener(this::actionPerformedPointSort);
 
-        sortByFirstPositions = new JButton("Sort By 1st No of Positions");
+        sortByFirstPositions = new JButton("Sort By 1st Positions");
         sortByFirstPositions.setBounds(300, 300, 200, 50);
         mainFrame.add(sortByFirstPositions);
         sortByFirstPositions.addActionListener(this::actionPerformedFirstSort);
 
-        randomRace = new JButton("Generate Random Race");
+        randomRace = new JButton("Random Race");
         randomRace.setBounds(550, 300, 200, 50);
         mainFrame.add(randomRace);
         randomRace.addActionListener(this::actionPerformedRandomRace);
-        mainFrame.setVisible(true);
 
-        raceDates = new JButton("Display Race Details");
-        raceDates.setBounds(800, 300, 200, 50);
+        randomRaceWithProb = new JButton("Random Race(With prob)");
+        randomRaceWithProb.setBounds(800, 300, 200, 50);
+        mainFrame.add(randomRaceWithProb);
+        randomRaceWithProb.addActionListener(this::actionPerformedRandomRaceWithProb);
+
+
+        raceDates = new JButton("Race Details");
+        raceDates.setBounds(1050, 300, 200, 50);
         mainFrame.add(raceDates);
         raceDates.addActionListener(this::actionPerformedRaceDates);
         mainFrame.setVisible(true);
@@ -376,12 +381,12 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 
             for (Formula1Driver sport : formula1){
 
-                int position=rand.nextInt(formula1.size());
+                int position=rand.nextInt(formula1.size())+1;
 
                 int temp=0;
                 while (temp==0){
                     if (tempPositions.contains(position)){
-                        position=rand.nextInt(formula1.size());
+                        position=rand.nextInt(formula1.size())+1;
                     }
                     else{
                         tempPositions.add(position);
@@ -440,6 +445,106 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                 sport.setNumber_of_races_participated(count=count+1);
 
             }
+    }
+
+    public void generate_randomRaceWithProb() {
+
+        Random rand = new Random();
+        ArrayList<Integer> tempPositions = new ArrayList<>();
+
+        int randomProb = rand.nextInt(100)+1;
+        int driver_num=0;
+
+        int probPosition;
+
+        if (randomProb<40) {probPosition = 1;}
+        else if (randomProb<70) {probPosition = 2;}
+        else if (randomProb<80) {probPosition = 3;}
+        else if (randomProb<90) {probPosition = 4;}
+        else if (randomProb<92) {probPosition = 5;}
+        else if (randomProb<94) {probPosition = 6;}
+        else if (randomProb<96) {probPosition = 7;}
+        else if (randomProb<98) {probPosition = 8;}
+        else {probPosition = 9;}
+
+        tempPositions.add(1);
+
+        for (Formula1Driver sport : formula1){
+
+            int point =sport.getNumber_of_points();
+            driver_num+=1;
+
+            if (driver_num==probPosition){
+                int pos1 =sport.getNumber_of_first_positions();
+                sport.setNumber_of_first_positions(pos1=pos1+1);
+                sport.setNumber_of_points(point=point+25);
+            }
+
+            else{
+                int position=rand.nextInt(formula1.size())+1;
+
+                int temp=0;
+                while (temp==0){
+                    if (tempPositions.contains(position)){
+                        position=rand.nextInt(formula1.size())+1;
+                    }
+                    else{
+                        tempPositions.add(position);
+                        temp=1;
+                    }
+                }
+
+                sport.setTemp_position(position=position);
+
+                switch (position){
+
+                    case 2:
+                        int pos2 =sport.getNumber_of_second_positions();
+                        sport.setNumber_of_second_positions(pos2=pos2+1);
+                        sport.setNumber_of_points(point=point+18);
+
+                        break;
+                    case 3:
+                        int pos3 =sport.getNumber_of_third_positions();
+                        sport.setNumber_of_third_positions(pos3=pos3+1);
+                        sport.setNumber_of_points(point=point+15);
+
+                        break;
+                    case 4:
+                        sport.setNumber_of_points(point=point+12);
+                        break;
+                    case 5:
+                        sport.setNumber_of_points(point=point+10);
+                        break;
+                    case 6:
+                        sport.setNumber_of_points(point=point+8);
+                        break;
+                    case 7:
+                        sport.setNumber_of_points(point=point+6);
+                        break;
+                    case 8:
+                        sport.setNumber_of_points(point=point+4);
+                        break;
+                    case 9:
+                        sport.setNumber_of_points(point=point+2);
+                        break;
+                    case 10:
+                        sport.setNumber_of_points(point=point+1);
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+
+
+            int count =sport.getNumber_of_races_participated();
+            sport.setNumber_of_races_participated(count=count+1);
+
+        }
+
+
+
     }
 
 
@@ -546,6 +651,26 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
             jsMain2.setBounds(40,400,1250,200);
             mainFrame.add(jsMain2);
 
+
+        }
+    }
+
+    public void actionPerformedRandomRaceWithProb(ActionEvent eRandomRaceWithProb){
+        if(eRandomRaceWithProb.getSource() == randomRaceWithProb){
+
+            generate_randomRaceWithProb();
+
+            Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
+            mainFrame.remove(jsMain);
+            JTable table = guiTableDisplayStatistics();
+            jsMain = new JScrollPane(table);
+            jsMain.setBounds(50,50,1250,200);
+            mainFrame.add(jsMain);
+
+            JTable raceTable = raceTableDisplayStatistics();
+            jsMain2 = new JScrollPane(raceTable);
+            jsMain2.setBounds(40,400,1250,200);
+            mainFrame.add(jsMain2);
 
         }
     }

@@ -11,11 +11,12 @@ public class Main  {
 
         System.out.println(" ------- Formula 1 championship. -------  ");
         recover_data();
-        randomRace();
+
         randomRace();
         randomRace();
         randomRace();
         gui();
+
 
         menu:
         while(true){
@@ -91,8 +92,9 @@ public class Main  {
 
         System.out.println("Enter team name : ");
         String team_name = user_input.nextLine();
+        int temp_position=0;
 
-        formula_add=new Formula1Driver(driver_name,driver_location,team_name,team_ID);
+        formula_add=new Formula1Driver(driver_name,driver_location,team_name,team_ID,temp_position);
 
         formula.add_driver(team_name,formula_add);
 

@@ -290,12 +290,6 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         mainFrame.add(jsMain);
 
 
-        JTable raceTable = guiTableDisplayStatistics();
-        jsMain = new JScrollPane(raceTable);
-        jsMain.setBounds(40,400,1250,200);
-        mainFrame.add(jsMain);
-
-
         sortByTotalPoint = new JButton("Sort By Points");
         sortByTotalPoint.setBounds(200, 300, 200, 50);
         mainFrame.add(sortByTotalPoint);
@@ -358,7 +352,8 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                 }
 
                 int point =sport.getNumber_of_points();
-                System.out.print(position+" ");
+                sport.setTemp_position(position=position);
+
                 switch (position){
                     case 1:
                         int pos1 =sport.getNumber_of_first_positions();
@@ -435,23 +430,20 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         return formula1DTable;
     }
 
+
+
     public JTable raceTableDisplayStatistics() {
         //Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
-        String raceTableColumn[] = {"Driver Name", "Position"};
+        String raceTableColumn[] = {"Driver Name", "Team Name","Position"};
         positionTable = new DefaultTableModel(raceTableColumn,0);
         raceTable = new JTable(positionTable);
         raceTable.setFillsViewportHeight(true);
         for (Formula1Driver formula1Driver : formula1) {
             String dName = formula1Driver.getDriver_name();
-            String dLocation = formula1Driver.getDriver_location();
             String team = formula1Driver.getDriver_team();
-            String team_id = Integer.toString(formula1Driver.getTeam_ID());
-            String numOfFirst = Integer.toString(formula1Driver.getNumber_of_first_positions());
-            String numOfSecond = Integer.toString(formula1Driver.getNumber_of_second_positions());
-            String numOfThird = Integer.toString(formula1Driver.getNumber_of_third_positions());
-            String numOfRace = Integer.toString(formula1Driver.getNumber_of_races_participated());
-            String numOfPoints = Integer.toString(formula1Driver.getNumber_of_points());
-            Object [] data = {dName, dLocation};
+            String pos = Integer.toString(formula1Driver.getTemp_position());
+
+            Object [] data = {dName, team,pos};
             positionTable.addRow(data);
         }
         positionTable.fireTableDataChanged();
@@ -491,6 +483,12 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
             jsMain = new JScrollPane(table);
             jsMain.setBounds(50,50,1250,200);
             mainFrame.add(jsMain);
+
+            JTable raceTable = raceTableDisplayStatistics();
+            jsMain = new JScrollPane(raceTable);
+            jsMain.setBounds(40,400,1250,200);
+            mainFrame.add(jsMain);
+
 
         }
     }

@@ -11,12 +11,7 @@ public class Main  {
 
         System.out.println(" ------- Formula 1 championship. -------  ");
         recover_data();
-
-        randomRace();
-        randomRace();
-        randomRace();
         gui();
-
 
         menu:
         while(true){
@@ -33,7 +28,7 @@ public class Main  {
             System.out.println("Enter \"0\" to exit");
             System.out.println("");
 
-            System.out.print("Enter your option : ");
+            System.out.print("Enter your choice : ");
             Scanner input = new Scanner(System.in);
             int user_option = input.nextInt();
 
@@ -170,7 +165,7 @@ public class Main  {
                     if (month >= 1 && month <= 12) {
                         System.out.print("Enter year : ");
                         int year = user_input.nextInt();
-                        String race_date=day+"/"+month+"/"+year;
+                        String race_date=year+"/"+month+"/"+day;
                         formula.updateScore(race_date);
 
                     }

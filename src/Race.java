@@ -1,9 +1,11 @@
-public class Race{
+import java.io.Serializable;
+
+public class Race implements Serializable {
     private String raceDate;
-    private int firstPosition;
-    private int SecondPosition;
-    private int thirdPosition;
-    public Race (String raceDate,int firstPosition,int SecondPosition,int thirdPosition){
+    private String firstPosition;
+    private String SecondPosition;
+    private String thirdPosition;
+    public Race (String raceDate,String firstPosition,String SecondPosition,String thirdPosition){
         this.raceDate =raceDate;
         this.firstPosition =firstPosition;
         this.SecondPosition =SecondPosition;
@@ -20,28 +22,28 @@ public class Race{
 
 
 
-    public int getFirstPosition (){
+    public String getFirstPosition (){
         return firstPosition;
     }
 
-    public void setFirstPosition(int firstPosition){
+    public void setFirstPosition(String firstPosition){
         this.firstPosition =firstPosition;
     }
 
 
 
-    public int getSecondPosition (){
+    public String getSecondPosition (){
         return SecondPosition;
     }
 
-    public void setSecondPosition(int SecondPosition){
+    public void setSecondPosition(String SecondPosition){
         this.SecondPosition =SecondPosition;
     }
-    public int getThirdPosition (){
+    public String getThirdPosition (){
         return thirdPosition;
     }
 
-    public void setThirdPosition(int thirdPosition){
+    public void setThirdPosition(String thirdPosition){
         this.thirdPosition =thirdPosition;
     }
 

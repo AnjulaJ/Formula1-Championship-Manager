@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.*;
 import java.util.*;
@@ -19,9 +20,9 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     JButton sortByFirstPositions;
     JButton randomRace;
 
-    JButton randomRaceWithProb;
+    JButton raceDates;
 
-    JButton displayAllRaces;
+    JButton randomRaceWithProb;
 
     JButton sortByFirstPos;
     JFrame mainFrame;
@@ -29,11 +30,15 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 
     JTable raceTable;
     JScrollPane jsMain;
-    JTable randomFormula1GenerateTable;
-    JScrollPane jsRandomRace;
-    JButton generateRandomRace;
+
+    JScrollPane jsMain2;
+
     DefaultTableModel driverTable;
     DefaultTableModel positionTable;
+
+    String firstPos;
+    String secondPos;
+    String thirdPos;
 
     @Override
     public void add_driver(String team_name,Formula1Driver formula_add) {
@@ -91,10 +96,14 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         }
         System.out.print(")" );
 
-        for (int i=1;i<=formula1.size();i++){
+
+
+        for (int i=1;i<=3;i++){
 
             System.out.println("\nEnter team id :");
             int team_id= user_input.nextInt();
+
+
 
             for (Formula1Driver sport : formula1){
                 if (sport.getTeam_ID()==team_id){
@@ -107,18 +116,21 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                             int pos1 =sport.getNumber_of_first_positions();
                             sport.setNumber_of_first_positions(pos1=pos1+1);
                             sport.setNumber_of_points(point=point+25);
+                            firstPos=sport.getDriver_name();
 
                             break;
                         case 2:
                             int pos2 =sport.getNumber_of_second_positions();
                             sport.setNumber_of_second_positions(pos2=pos2+1);
                             sport.setNumber_of_points(point=point+18);
+                            secondPos=sport.getDriver_name();
 
                             break;
                         case 3:
                             int pos3 =sport.getNumber_of_third_positions();
                             sport.setNumber_of_third_positions(pos3=pos3+1);
                             sport.setNumber_of_points(point=point+15);
+                            thirdPos=sport.getDriver_name();
 
                             break;
                         case 4:
@@ -151,7 +163,10 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
                 }
 
             }
+
         }
+        Race raceDetails=new Race(race_date,firstPos,secondPos,thirdPos);
+        races.add(raceDetails);
 
     }
 
@@ -160,12 +175,20 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     public void save_to_file(ArrayList<Formula1Driver> formula1) throws IOException {
         //https://howtodoinjava.com/java/collections/arraylist/serialize-deserialize-arraylist/
         try
-        {
+        {   //save formula1 object
             FileOutputStream fos = new FileOutputStream("formula1Data.txt");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(formula1);
             oos.close();
             fos.close();
+
+            //save races object
+            FileOutputStream fos2 = new FileOutputStream("raceData.txt");
+            ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
+            oos2.writeObject(races);
+            oos2.close();
+            fos2.close();
+
             System.out.println("..data saved successfully------");
 
         }
@@ -179,7 +202,7 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
     public void load_data() {
         //https://howtodoinjava.com/java/collections/arraylist/serialize-deserialize-arraylist/
         try
-        {
+        {   // Loading Formula1 data
             FileInputStream fis = new FileInputStream("formula1Data.txt");
             ObjectInputStream ois = new ObjectInputStream(fis);
 
@@ -187,6 +210,16 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
 
             ois.close();
             fis.close();
+
+            //Loading Races data
+            FileInputStream fis2 = new FileInputStream("raceData.txt");
+            ObjectInputStream ois2 = new ObjectInputStream(fis2);
+
+            races = (ArrayList) ois2.readObject();
+
+            ois2.close();
+            fis2.close();
+
             System.out.println("Data loaded 100%");
         }
         catch (IOException ioe)
@@ -279,8 +312,8 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //setting the main logo
-//        ImageIcon mainLogo = new ImageIcon("formula1Logo.png");
-//        mainFrame.setIconImage(mainLogo.getImage());
+        ImageIcon mainLogo = new ImageIcon("formula1_logo.png");
+        mainFrame.setIconImage(mainLogo.getImage());
 
         //Displaying the main table
         Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points).reversed());
@@ -289,21 +322,26 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         jsMain.setBounds(50,50,1250,200);
         mainFrame.add(jsMain);
 
-
         sortByTotalPoint = new JButton("Sort By Points");
-        sortByTotalPoint.setBounds(200, 300, 200, 50);
+        sortByTotalPoint.setBounds(50, 300, 200, 50);
         mainFrame.add(sortByTotalPoint);
         sortByTotalPoint.addActionListener(this::actionPerformedPointSort);
 
         sortByFirstPositions = new JButton("Sort By 1st No of Positions");
-        sortByFirstPositions.setBounds(500, 300, 200, 50);
+        sortByFirstPositions.setBounds(300, 300, 200, 50);
         mainFrame.add(sortByFirstPositions);
         sortByFirstPositions.addActionListener(this::actionPerformedFirstSort);
 
         randomRace = new JButton("Generate Random Race");
-        randomRace.setBounds(800, 300, 200, 50);
+        randomRace.setBounds(550, 300, 200, 50);
         mainFrame.add(randomRace);
         randomRace.addActionListener(this::actionPerformedRandomRace);
+        mainFrame.setVisible(true);
+
+        raceDates = new JButton("Display Race Details");
+        raceDates.setBounds(800, 300, 200, 50);
+        mainFrame.add(raceDates);
+        raceDates.addActionListener(this::actionPerformedRaceDates);
         mainFrame.setVisible(true);
 
     }
@@ -450,6 +488,25 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
         return raceTable;
     }
 
+    public JTable dateTableDisplayStatistics() {
+        sortingDates();
+        String raceTableColumn[] = {"Date","1st Position","2nd Position","3rd Position"};
+        positionTable = new DefaultTableModel(raceTableColumn,0);
+        raceTable = new JTable(positionTable);
+        raceTable.setFillsViewportHeight(true);
+        for (Race race_details : races) {
+            String date = race_details.getRaceDate();
+            String firstPos = race_details.getFirstPosition();
+            String secondPos = race_details.getSecondPosition();
+            String thirdPos = race_details.getThirdPosition();
+
+            Object [] data = {date, firstPos,secondPos,thirdPos};
+            positionTable.addRow(data);
+        }
+        positionTable.fireTableDataChanged();
+        return raceTable;
+    }
+
     public void actionPerformedPointSort(ActionEvent ePointSort){
         if(ePointSort.getSource() == sortByTotalPoint){
             Collections.sort(formula1, Comparator.comparingInt(Formula1Driver::getNumber_of_points));
@@ -485,12 +542,41 @@ public class Formula1ChampionshipManager  implements ChampionshipManager {
             mainFrame.add(jsMain);
 
             JTable raceTable = raceTableDisplayStatistics();
-            jsMain = new JScrollPane(raceTable);
-            jsMain.setBounds(40,400,1250,200);
-            mainFrame.add(jsMain);
+            jsMain2 = new JScrollPane(raceTable);
+            jsMain2.setBounds(40,400,1250,200);
+            mainFrame.add(jsMain2);
 
 
         }
+    }
+
+    public void actionPerformedRaceDates(ActionEvent eRaceDates){
+        if(eRaceDates.getSource() == raceDates){
+
+            mainFrame.remove(jsMain2);
+            JTable raceTable = dateTableDisplayStatistics();
+            jsMain2 = new JScrollPane(raceTable);
+            jsMain2.setBounds(40,400,1250,200);
+            mainFrame.add(jsMain2);
+
+
+
+        }
+    }
+
+    static class sortItems implements Comparator<Race> {
+        public int compare(Race a, Race b)
+        {
+
+            // Returning the value after comparing the objects
+            // this will sort the data in Ascending order
+            return a.getRaceDate().compareTo(b.getRaceDate());
+        }
+    }
+
+    public void sortingDates(){
+        Collections.sort(races, new sortItems());
+
     }
 
 }
